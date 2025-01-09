@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détection du language</title>
+</head>
+<body>
+  
+  <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+  <script>
+    const browserLanguage = navigator.language || navigator.userLanguage;
+        
+    // Extraire uniquement le code ISO 639-1 (exemple: "fr", "en")
+    const isoLanguage = browserLanguage.split('-')[0];
+
+    const currentUrl = window.location.href;
+    const websiteOrigin = currentUrl.startsWith("https://www.lensonline.nl") ? 'nl' : '';
+    window.botpress.init({
+      "botId": "76056add-58a7-44af-878c-7cb05aeef558",
+      "configuration": {
+        "website": {},
+        "email": {},
+        "phone": {},
+        "termsOfService": {},
+        "privacyPolicy": {},
+        "color": "#3B82F6",
+        "variant": "solid",
+        "themeMode": "light",
+        "fontFamily": "inter",
+        "radius": 1
+      },
+      "clientId": "858ba91c-7fd4-427a-991e-4ed5b8c9c8a7",
+      "user": {
+        "data": {
+          "language": isoLanguage,
+          "websiteOrigin": websiteOrigin
+        }
+      }
+    });
+  </script>
+  <script>
+    // Fonction pour détecter la langue du navigateur et envoyer un événement à Botpress
+    async function detectLanguageAndSendEvent() {
+        // Récupérer la langue du navigateur (exemple: "fr-FR", "en-US")
+        const browserLanguage = navigator.language || navigator.userLanguage;
+        
+        // Extraire uniquement le code ISO 639-1 (exemple: "fr", "en")
+        const isoLanguage = browserLanguage.split('-')[0];
+
+        // Format de l'événement Botpress
+        const botpressEvent = {
+            type: 'language-detected',
+            payload: { language: isoLanguage }
+        };
+
+        // Envoyer l'événement à Botpress
+        if (window.botpress) {
+            await window.botpress.sendEvent(botpressEvent)
+            console.log(`Langue détectée: ${isoLanguage}. Événement envoyé à Botpress.`);
+        } else {
+            console.error("Botpress WebChat n'est pas initialisé.");
+        }
+    }
+
+    // Appeler la fonction à la première interaction ou au chargement de la page
+    // window.addEventListener('load', () => setTimeout(() => {
+    //     detectLanguageAndSendEvent();
+    // }, 3000));
+
+  </script>
+  <!-- <script src="https://files.bpcontent.cloud/2024/11/30/12/20241130120719-TXSC6N00.js"></script> -->
+
+
+</body>
+</html>
